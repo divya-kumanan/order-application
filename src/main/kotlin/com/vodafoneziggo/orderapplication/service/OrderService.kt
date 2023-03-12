@@ -19,24 +19,24 @@ class OrderService(
         val email = orderRequest.email
         val productId = orderRequest.productId
 
-        val userDetails = getUserDetails(userResponse?.body, email)
+        val userDetails = getUserDetails(userResponse.body, email)
 
         // Check if the email exists in UserResponse
-        if (userResponse == null || userDetails == null) {
-            throw IllegalArgumentException("Invalid email")
+        if (userDetails?.isEmpty() == true) {
+            throw IllegalArgumentException("Unable to find the user account associated with this email $email")
         }
 
         // Check if the customer has not ordered this product already
         if (orderRepository.existsByProductIdAndEmail(productId, email)) {
-            throw IllegalArgumentException("Product already ordered by customer")
+            throw IllegalArgumentException("Product $productId has been already ordered")
         }
 
         // Save the order to the database
         val order = Order(
             productId = productId,
             email = email,
-            firstName = userDetails.first()?.firstName.toString(),
-            lastName =  userDetails.first()?.lastName.toString()
+            firstName = userDetails?.first()?.firstName,
+            lastName =  userDetails?.first()?.lastName
         )
         val savedOrder = orderRepository.save(order)
 

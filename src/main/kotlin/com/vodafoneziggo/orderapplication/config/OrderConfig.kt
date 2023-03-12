@@ -1,4 +1,4 @@
-package com.vodafoneziggo.orderapplication
+package com.vodafoneziggo.orderapplication.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

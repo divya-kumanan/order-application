@@ -13,11 +13,11 @@ data class Order(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     @Column(name= "product_id")
-    val productId: String,
+    val productId: String? = null,
     @Column(name= "email")
-    val email: String,
+    val email: String?=null,
     @Column(name= "first_name")
-    val firstName: String,
+    val firstName: String?=null,
     @Column(name= "last_name")
-    val lastName: String
+    val lastName: String?=null
 )
