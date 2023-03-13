@@ -38,6 +38,14 @@ class OrderController(private val orderService: OrderService) {
                         mediaType = "application/json",
                         array = ArraySchema(schema = Schema(implementation = OrderErrorResponse::class))
                     )]
+            ),
+            ApiResponse(
+                responseCode = "500", description = "Internal Server Error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = OrderErrorResponse::class))
+                    )]
             )
         ]
     )
@@ -52,18 +60,32 @@ class OrderController(private val orderService: OrderService) {
 
     @Operation(summary = "Get all orders")
     @ApiResponses(
-        value = [ApiResponse(
-            responseCode = "200", description = "Successfully retrieved all the orders",
-            content = [
-                Content(
-                    mediaType = "application/json",
-                    array = ArraySchema(schema = Schema(implementation = OrderResponse::class))
-                )]
-        )]
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Successfully retrieved all the orders",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = OrderResponse::class))
+                    )]
+            ),
+            ApiResponse(
+                responseCode = "500", description = "Internal Server Error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = OrderErrorResponse::class))
+                    )]
+            )
+        ]
     )
     @GetMapping
-    fun getAllOrders(): OrderResponse {
-        val orders = orderService.getAllOrders()
+    fun getAllOrders(@RequestParam(required = false) email: String?): OrderResponse {
+        val orders = if (email.isNullOrEmpty()) {
+            orderService.getAllOrders()
+        } else {
+            orderService.getOrdersByEmail(email)
+        }
         return OrderResponse.from(orders = orders)
     }
 }
