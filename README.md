@@ -32,11 +32,11 @@ docker run -p 8080:8080 order-application
 ```
 This will start the container and map port 8080 in the container to port 8080 on your host machine.
 
-2. Access the application in your web browser:
+2. Access the order-application in your web browser:
 ```
-http://localhost:8080
+http://localhost:8080/swagger-ui/index.html
 ```
-This will bring up the home page of your Spring Boot application.
+This will bring up the swagger document of your Spring Boot application.
 
 ## Stopping the Docker container
 1. To stop the Docker container, open a new terminal window and run the following command to list all running containers:
@@ -49,3 +49,20 @@ docker ps
 docker stop container_id
 ```
 Replace `container_id` with the actual container ID for `order-application`.
+
+## Running the Regression Test in Postman
+1. Open the Postman App 
+2. Import the collection `OrderApplication-Vodafone.postman_collection.json` and `Local.postman_collection.json`  from the root folder of order-application.
+3. Click on Runner and drag the folder `Regression Test for OrderApi` to the Runner
+4. Select the environment `Local`
+5. Start Run
+
+## View Open-Api Specification(Swagger) for order-application
+1. Access the swagger document [openapi yaml file]
+```
+http://localhost:8080/v3/api-docs
+```
+2. Access the swagger document in UI
+```
+http://localhost:8080/swagger-ui/index.html
+```
