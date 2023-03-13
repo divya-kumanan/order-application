@@ -2,6 +2,7 @@ package com.vodafoneziggo.orderapplication.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.*
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class OrderResponse(
@@ -12,6 +13,11 @@ data class OrderResponse(
         fun from(orders: List<Order>): OrderResponse {
             val orderDetails = orders.map { OrderDetails(it.id, it.email, it.firstName, it.lastName, it.productId) }
             return OrderResponse(orderDetails = orderDetails)
+        }
+
+        fun from(order: Order): OrderResponse{
+            val orderDetails = OrderDetails(order.id, order.email, order.firstName, order.lastName, order.productId)
+            return OrderResponse(orderDetails = listOf(orderDetails))
         }
     }
 }
