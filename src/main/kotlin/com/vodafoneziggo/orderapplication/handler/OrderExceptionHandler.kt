@@ -23,7 +23,7 @@ class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException::class, UserNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleOrderNotFoundException(ex: OrderNotFoundException): OrderErrorResponse {
+    fun handleOrderNotFoundException(ex: Exception): OrderErrorResponse {
         return OrderErrorResponse(HttpStatus.NOT_FOUND.value(), ex.message)
     }
 

@@ -24,7 +24,7 @@ data class OrderResponse(
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class OrderDetails(
-    @JsonProperty("orderID")
+    @JsonProperty("order_id")
     val orderId: Long? = 0,
     @JsonProperty("email")
     val email: String? = null,
@@ -32,6 +32,6 @@ data class OrderDetails(
     val firstName: String? = null,
     @JsonProperty("last_name")
     val lastName: String? = null,
-    @JsonProperty("productID")
+    @JsonProperty("product_id")
     val productId: String? = null
 )
