@@ -58,7 +58,7 @@ Replace `container_id` with the actual container ID for `order-application`.
 5. Start Run
 
 ## View Open-Api Specification(Swagger) for order-application
-1. Access the swagger document [openapi yaml file]
+1. Access the swagger document [openapi yaml file] 
 ```
 http://localhost:8080/v3/api-docs
 ```
@@ -66,3 +66,4 @@ http://localhost:8080/v3/api-docs
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
+3. View the existing swagger document `openapi.yml` in the root folder of the application
