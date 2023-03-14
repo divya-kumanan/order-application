@@ -1,0 +1,22 @@
+spring:
+  profiles: prod
+  #h2 database
+  datasource:
+    url: jdbc:h2:mem:proddb
+    driverClassName: org.h2.Driver
+    username: proddbuser
+    password: prodpswd
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: update
+  # Enabling H2 Console
+  h2:
+    console:
+      enabled: true
+      # Custom H2 Console URL
+      path: /h2
+  
+#User api endpoint
+user:
+  api:
+    url: https://reqres.in/api/users
