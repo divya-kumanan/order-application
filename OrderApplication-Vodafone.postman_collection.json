@@ -466,6 +466,49 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Check the application health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 200 Created\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains status details\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.equals(\"UP\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/actuator/health",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "xy1@email.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
