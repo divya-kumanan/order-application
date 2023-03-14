@@ -34,9 +34,9 @@ This will start the container and map port 8080 in the container to port 8080 on
 
 2. Access the order-application in your web browser:
 ```
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/actuator/health
 ```
-This will bring up the swagger document of your Spring Boot application.
+This will bring up the health status of your Spring Boot application.
 
 ## Stopping the Docker container
 1. To stop the Docker container, open a new terminal window and run the following command to list all running containers:
