@@ -1,0 +1,207 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: 'http://localhost:8080'
+    description: Generated server url
+tags:
+  - name: Order API
+    description: Order API Documentation
+paths:
+  /orderapplication/order:
+    post:
+      tags:
+        - Order API
+      summary: Create Order
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+        required: true
+      responses:
+        '201':
+          description: Order Creation Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Invalid Order Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderErrorResponse'
+        '404':
+          description: User has not been associated with the account
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderErrorResponse'
+  /orderapplication/orders:
+    get:
+      tags:
+        - Order API
+      summary: Get all orders
+      operationId: getAllOrders
+      parameters:
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved all the orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderErrorResponse'
+        '404':
+          description: Order does not exists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderErrorResponse'
+  '/orderapplication/orders/{orderId}':
+    get:
+      tags:
+        - Order API
+      summary: Get specific order based on OrderID
+      operationId: getOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully retrieved all the orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderErrorResponse'
+        '404':
+          description: Order does not exists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderErrorResponse'
+components:
+  schemas:
+    OrderErrorResponse:
+      required:
+        - code
+      type: object
+      properties:
+        code:
+          type: number
+        description:
+          type: string
+    OrderRequest:
+      required:
+        - email
+        - productId
+      type: object
+      properties:
+        productId:
+          type: string
+        email:
+          type: string
+    OrderDetails:
+      type: object
+      properties:
+        order_id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        product_id:
+          type: string
+    OrderResponse:
+      required:
+        - orderDetails
+      type: object
+      properties:
+        description:
+          type: string
+        orderDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderDetails'
