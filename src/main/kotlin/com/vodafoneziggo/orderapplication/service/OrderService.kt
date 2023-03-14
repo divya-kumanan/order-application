@@ -1,7 +1,7 @@
 package com.vodafoneziggo.orderapplication.service
 
-import com.vodafoneziggo.orderapplication.OrderAlreadyExistsException
-import com.vodafoneziggo.orderapplication.UserNotFoundException
+import com.vodafoneziggo.orderapplication.exception.OrderAlreadyExistsException
+import com.vodafoneziggo.orderapplication.exception.UserNotFoundException
 import com.vodafoneziggo.orderapplication.model.Order
 import com.vodafoneziggo.orderapplication.model.OrderRequest
 import com.vodafoneziggo.orderapplication.model.UserResponse
@@ -23,7 +23,7 @@ class OrderService(
         val userDetails = getUserDetails(userResponse, email)
 
         // Check if the email exists in UserResponse
-        if (userDetails?.isEmpty() == true) {
+        if (userDetails.isNullOrEmpty()) {
             throw UserNotFoundException("Unable to find the user account associated with this email $email")
         }
 
@@ -36,8 +36,8 @@ class OrderService(
         val order = Order(
             productId = productId,
             email = email,
-            firstName = userDetails?.first()?.firstName,
-            lastName =  userDetails?.first()?.lastName
+            firstName = userDetails.first().firstName,
+            lastName =  userDetails.first().lastName
         )
         val savedOrder = orderRepository.save(order)
 

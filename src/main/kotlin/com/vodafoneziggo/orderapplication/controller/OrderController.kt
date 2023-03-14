@@ -1,6 +1,6 @@
 package com.vodafoneziggo.orderapplication.controller
 
-import com.vodafoneziggo.orderapplication.OrderNotFoundException
+import com.vodafoneziggo.orderapplication.exception.OrderNotFoundException
 import com.vodafoneziggo.orderapplication.model.OrderDetails
 import com.vodafoneziggo.orderapplication.model.OrderErrorResponse
 import com.vodafoneziggo.orderapplication.model.OrderRequest

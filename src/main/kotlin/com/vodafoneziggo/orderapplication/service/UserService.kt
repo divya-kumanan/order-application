@@ -1,6 +1,6 @@
 package com.vodafoneziggo.orderapplication.service
 
-import com.vodafoneziggo.orderapplication.UserApiException
+import com.vodafoneziggo.orderapplication.exception.UserApiException
 import com.vodafoneziggo.orderapplication.model.UserResponse
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpStatusCodeException

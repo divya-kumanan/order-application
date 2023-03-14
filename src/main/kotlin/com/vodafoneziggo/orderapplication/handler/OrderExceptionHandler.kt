@@ -1,9 +1,9 @@
 package com.vodafoneziggo.orderapplication.handler
 
-import com.vodafoneziggo.orderapplication.OrderAlreadyExistsException
-import com.vodafoneziggo.orderapplication.OrderNotFoundException
-import com.vodafoneziggo.orderapplication.UserApiException
-import com.vodafoneziggo.orderapplication.UserNotFoundException
+import com.vodafoneziggo.orderapplication.exception.OrderAlreadyExistsException
+import com.vodafoneziggo.orderapplication.exception.OrderNotFoundException
+import com.vodafoneziggo.orderapplication.exception.UserApiException
+import com.vodafoneziggo.orderapplication.exception.UserNotFoundException
 import com.vodafoneziggo.orderapplication.model.OrderErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

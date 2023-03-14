@@ -1,4 +1,4 @@
-package com.vodafoneziggo.orderapplication
+package com.vodafoneziggo.orderapplication.exception
 
 // Exception to indicate that the specified email does not exist in the users API
 class UserNotFoundException(message: String) : RuntimeException(message)
