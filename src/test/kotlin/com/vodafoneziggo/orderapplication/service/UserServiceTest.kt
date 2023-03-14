@@ -1,10 +1,12 @@
 package com.vodafoneziggo.orderapplication.service
 
+import com.vodafoneziggo.orderapplication.config.UserApiConfig
 import com.vodafoneziggo.orderapplication.exception.UserApiException
 import com.vodafoneziggo.orderapplication.model.User
 import com.vodafoneziggo.orderapplication.model.UserResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
@@ -22,8 +24,16 @@ class UserServiceTest {
     @Mock
     private lateinit var restTemplate: RestTemplate
 
+    @Mock
+    private lateinit var userApiConfig: UserApiConfig
+
     @InjectMocks
     private lateinit var userService: UserService
+
+    @BeforeEach
+    fun setUp(){
+        `when`(userApiConfig.url).thenReturn("https://reqres.in/api/users")
+    }
 
     @Test
     fun `when user api return successful response`(){
