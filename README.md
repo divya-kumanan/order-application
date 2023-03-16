@@ -16,7 +16,7 @@ cd order-application
 ```
 mvn clean install
 ```
-This will build the application and create a JAR file in the `target/` directory.
+This will build the application and create a JAR file in the `target` directory.
 
 ## Building the Docker image
 1. Build the Docker image:
@@ -52,7 +52,7 @@ Replace `container_id` with the actual container ID for `order-application`.
 
 ## Running the Regression Test in Postman
 1. Open the Postman App 
-2. Import the collection `OrderApplication-Vodafone.postman_collection.json` and `Local.postman_collection.json`  from the root folder of order-application.
+2. Import the collection `OrderApplication-Media.postman_collection.json` and `Local.postman_collection.json`  from the root folder of order-application.
 3. Click on Runner and drag the folder `Regression Test for OrderApi` to the Runner
 4. Select the environment `Local`
 5. Start Run

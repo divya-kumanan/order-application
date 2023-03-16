@@ -1,0 +1,589 @@
+{
+	"info": {
+		"_postman_id": "02af55c5-2b87-424f-b201-7aaa4c1e8a4a",
+		"name": "Regression Test for OrderApplication - Media",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UsersApi",
+			"item": [
+				{
+					"name": "UsersApi",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://reqres.in/api/users?email=george.bluth@reqres.in",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "george.bluth@reqres.in"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrdersApiCollection",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{basepath}}/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"george.bluth@reqres.in\",\n    \"productId\":\"prd1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{basepath}}/order",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Regression Test for OrderApi",
+			"item": [
+				{
+					"name": "Create Order",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 201 Created\", function() {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response body contains orderID and productID\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.orderDetails[0].order_id).to.exist;",
+									"    pm.expect(jsonData.orderDetails[0].product_id).to.exist;",
+									"});",
+									"",
+									"pm.test(\"Order was stored in the database\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    var orderId = jsonData.orderID;",
+									"    var email = jsonData.email;",
+									"    var productID = jsonData.productID;",
+									"    ",
+									"    pm.sendRequest({",
+									"        url: `http://localhost:8080/api/orders/${orderId}`,",
+									"        method: 'GET',",
+									"        header: 'Content-Type:application/json'",
+									"    }, function(err, res) {",
+									"        if (err) {",
+									"            console.log(err);",
+									"        } else {",
+									"            var jsonData = res.json();",
+									"            pm.expect(jsonData.orderID).to.equal(orderId);",
+									"            pm.expect(jsonData.email).to.equal(email);",
+									"            pm.expect(jsonData.productID).to.equal(productID);",
+									"        }",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"eve.holt@reqres.in\",\n    \"productId\":\"prd1235\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{basepath}}/order",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create order with the email account not associated with User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 404\", function() {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response body contains description\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.description).to.equals(\"Unable to find the user account associated with this email divya.bluth@reqres.in\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"divya.bluth@reqres.in\",\n    \"productId\":\"prd1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{basepath}}/order",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve all the orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 200 Created\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains order details\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.orderDetails[0].order_id).to.exist;",
+									"    pm.expect(jsonData.orderDetails[0].email).to.exist;",
+									"    pm.expect(jsonData.orderDetails[0].product_id).to.exist;",
+									"    pm.expect(jsonData.orderDetails[0].first_name).to.exist;",
+									"    pm.expect(jsonData.orderDetails[0].last_name).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{basepath}}/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "xy1@email.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve all the orders based on email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 200 Created\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains order details\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.orderDetails[0].order_id).to.equals(4)",
+									"    pm.expect(jsonData.orderDetails[0].email).to.equals(\"eve.holt@reqres.in\")",
+									"    pm.expect(jsonData.orderDetails[0].product_id).to.equals(\"prd1235\")",
+									"    pm.expect(jsonData.orderDetails[0].first_name).to.equals(\"Eve\")",
+									"    pm.expect(jsonData.orderDetails[0].last_name).to.equals(\"Holt\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{basepath}}/orders?email=eve.holt@reqres.in",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "eve.holt@reqres.in"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order doesnot exists for the email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 404\", function() {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response body contains description\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.description).to.equals(\"Order does not exists\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{basepath}}/orders?email=xy1@email.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "xy1@email.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve order based on OrderID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 200 Created\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains order details\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.orderDetails[0].order_id).to.equals(4)",
+									"    pm.expect(jsonData.orderDetails[0].email).to.equals(\"eve.holt@reqres.in\")",
+									"    pm.expect(jsonData.orderDetails[0].product_id).to.equals(\"prd1235\")",
+									"    pm.expect(jsonData.orderDetails[0].first_name).to.equals(\"Eve\")",
+									"    pm.expect(jsonData.orderDetails[0].last_name).to.equals(\"Holt\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{basepath}}/orders/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"orders",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve order based on Invalid OrderID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 400\", function() {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response body contains description\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.description).to.equals(\"Order ID should be a number\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{basepath}}/orders/OD12546",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{basepath}}",
+								"orders",
+								"OD12546"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Swagger Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains order api specification\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.info.title).to.equals(\"OpenAPI definition\")",
+									"    pm.expect(jsonData.tags[0].name).to.equals(\"Order API\")",
+									"    pm.expect(jsonData.tags[0].description).to.equals(\"Order API Documentation\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v3/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v3",
+								"api-docs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check the application health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 200 Created\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains status details\", function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.equals(\"UP\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/actuator/health",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "xy1@email.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
